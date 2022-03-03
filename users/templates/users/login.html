@@ -1,0 +1,55 @@
+{% extends "quiz/base.html" %}
+ {% block content %}
+    <div class="content-section" style="width: 50%; border: 1px solid black; padding: 20px; padding-top: 5px; margin-left: 25%; margin-right: 25%; margin-top: 50px;">
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom">
+                    Log In
+                </legend>
+                    {% for field in form %}
+                <p>
+                    {{ field.label_tag }}<br>
+                    {{ field }}
+
+                    {% if field.help_text %}
+                        <small style="color: grey">{{ field.help_text }}</small>
+                    {% endif %}
+
+                    {% for error in field.errors %}
+                     <p style="color: red">{{ error }}</p>
+                    {% endfor %}
+                </p>
+            {% endfor %}
+            </fieldset>
+            <div class="form-group">
+                <p style="text-align:center;"><button class="btn btn-primary" type="submit">Log In</button></p>
+            </div>
+        </form>
+        <div class="border-top pt-3">
+            <small class="text-muted">
+                Need a new Account?<a class="ml-2" href = "{% url 'logout' %}"> Sign Up</a>
+            </small>
+        </div>
+    </div>
+
+<!--<script>-->
+
+<!--var t = 5000-->
+<!--var hours = Math.floor((t%(1000 * 60 * 60 * 24))/(1000 * 60 * 60));-->
+<!--var minutes = Math.floor((t % (1000 * 60 * 60)) / (1000 * 60));-->
+<!--var seconds = Math.floor((t % (1000 * 60)) / 1000);-->
+<!--document.getElementById("day").innerHTML =days ;-->
+<!--document.getElementById("hour").innerHTML =hours;-->
+<!--document.getElementById("minute").innerHTML = minutes;-->
+<!--document.getElementById("second").innerHTML =seconds;-->
+<!--if (t < 0) {-->
+<!--        clearInterval(x);-->
+<!--        document.getElementById("demo").innerHTML = "TIME UP";-->
+<!--        document.getElementById("day").innerHTML ='0';-->
+<!--        document.getElementById("hour").innerHTML ='0';-->
+<!--        document.getElementById("minute").innerHTML ='0' ;-->
+<!--        document.getElementById("second").innerHTML = '0'; }-->
+<!--}, 1000);-->
+<!--</script>-->
+{% endblock %}

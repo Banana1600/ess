@@ -1,0 +1,84 @@
+{% extends "quiz/base.html" %}
+ {% block content %}
+ <br>
+   <div class="col-sm-3"></div>
+   <div class="col-sm-6 ">
+       <div class="row" style="border:1px solid; padding:20px;">
+         <div class="media-body">
+          <div class="article-metadata">
+           <a class="mr-2" href="{% url 'user_details' object.author.id %}"><img class="rounded-circle article-img" src="{{ object.author.profile.image.url }}" style="width:25px;">  {{ quiz.author }}</a>
+           <small class="text-muted" >{{ object.date_posted }}</small>
+          </div>
+          <hr>
+             <div style="text-align:center;">
+                 <h2><a class="article-title" href="#">{{ object.title }}</a></h2>
+             </div><br>
+             <div class="col-sm-7 ">
+                  {% if not object.instructions %}
+                     <p class="article-content">Instructions : There are no specific Instructions.</p>
+                  {% else %}
+                     <p class="article-content">Instructions :</p>
+                     <p class="article-content">{{ object.instructions|linebreaks}}</p>
+                  {% endif %}
+             </div>
+             <div class="col-sm-3 ">
+                 <p class="article-content">Questions : {{ object.questions }}</p>
+             </div>
+             <div class="col-sm-2 ">
+                 <p class="article-content">Marks : {{ object.marks }}</p>
+             </div>
+         </div>
+           <br>
+<!--           <div class="col-sm-1"></div>-->
+<!--           <div class = "col-sm-2">-->
+<!--               <p class="article-content">Quiz Password : </p>-->
+<!--           </div>-->
+<!--           <div class="row">-->
+<!--               <div class = "col-sm-6">-->
+<!--                   <input type="password" class="form-control" id="inputPassword" placeholder="Password">-->
+<!--               </div>-->
+<!--               <div class = "col-sm-2">-->
+<!--                   <button onclick="redir()" class="btn btn-primary" >Start</button>-->
+<!--               </div>-->
+<!--               <div class="col-sm-1"></div>-->
+<!--           </div>-->
+<!--           <div class="row">-->
+<!--               <div class = "col-sm-4"></div>-->
+<!--               <div class = "col-sm-5">-->
+<!--                   <p id="demo" style="color:red;"></p></div>-->
+<!--               <div class="col-sm-3"></div>-->
+<!--           </div>-->
+
+
+           <div class = "row">
+               <form method="POST">
+                   {% csrf_token %}
+                   <div class="col-sm-1"></div>
+                   <div class = "col-sm-2">
+                       <p class="article-content">Quiz Password : </p>
+                   </div>
+                   <div class = "col-sm-6">
+                       {{ form.password }}
+                   </div>
+                   <div class = "col-sm-2">
+                       <input type="submit" class="btn btn-primary" >
+                   </div>
+                   <div class="col-sm-1"></div>
+               </form>
+               {% if error %}
+                    <div class="row">
+                        <div class="col-sm-3"></div>
+                        <div class="col-sm-6">
+                            <p style="color: red">Please Enter Correct Password</p>
+                        </div>
+                        <div class="col-sm-3"></div>
+                    </div>
+               {% endif %}
+           </div>
+
+        </div>
+    <br>
+   </div>
+   <div class="col-sm-3 "></div>
+
+ {% endblock %}

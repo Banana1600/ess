@@ -1,0 +1,175 @@
+{% extends "quiz/base.html" %}
+ {% block content %}
+    <div class="container">
+        <div class="col-sm-6">
+            <div class="row" style="border:1px solid; padding:10px;">
+                <div class="media">
+                    <div class="col-sm-3">
+                        <img style="border-radius:50%; width:100px;" class="rounded-circle account-img" src="{{ user.profile.image.url }}">
+                    </div>
+                    <div class="col-sm-9">
+                        <div class="media-body">
+                            <h2 class="account heading">{{ user.first_name }} {{ user.last_name }}</h2>
+<!--                            <p class="text-secondary">{{ user.username }}</p>-->
+                            <p class="text-secondary">{{ user.email }}</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <br>
+                <div style="text-align:center;">
+                    <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo">Update Profile</button>
+                </div>
+                <div id="demo" class="collapse">
+                    <div class="content-section" style="width: 100%; border: 1px solid black; padding: 20px; padding-top: 5px; margin-top: 20px;">
+                    <form method="POST" enctype="multipart/form-data">
+                            {% csrf_token %}
+                             <fieldset class="form-group">
+                                    <legend class="border-bottom">
+                                        Profile Info
+                                 </legend>
+                                {% for field in u_form %}
+                            <p>
+                                {{ field.label_tag }}<br>
+                                {{ field }}
+
+                                {% if field.help_text %}
+                                    <small style="color: grey">{{ field.help_text }}</small>
+                                {% endif %}
+
+                                {% for error in field.errors %}
+                                 <p style="color: red">{{ error }}</p>
+                                {% endfor %}
+                            </p>
+                        {% endfor %}
+                                 {% for field in p_form %}
+                            <p>
+                                {{ field.label_tag }}<br>
+                                {{ field }}
+
+                                {% if field.help_text %}
+                                    <small style="color: grey">{{ field.help_text }}</small>
+                                {% endif %}
+
+                                {% for error in field.errors %}
+                                 <p style="color: red">{{ error }}</p>
+                                {% endfor %}
+                            </p>
+                        {% endfor %}
+                        </fieldset>
+                        <div class="form-group">
+                            <p style="text-align:center;"><button class="btn btn-primary" type="submit">Update</button></p>
+                        </div>
+                    </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-sm-1"></div>
+        <div class="col-sm-5">
+            <div class="row">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo1">Hosted Quizzes</button>
+                    </div>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="Search Hosted Quizzes" name="Search">
+                    </div>
+                </div>
+                <br><br>
+                <div id="demo1" class="collapse">
+                    {% for quiz in quizes %}
+                    <div class="row">
+                        <div style="border:1px solid; padding:10px;">
+                            <div class="row"style="padding-bottom:5px;">
+                                <div class="col-sm-7">
+                                    <h3><a href="#">{{ quiz.title }}</a></h3>
+                                </div>
+                                <div class="col-sm-5" style="padding-top:20px;">
+                                        <small class="text-muted" >Date: {{ quiz.date_posted|date:"d/m/y, h:i a" }}</small>
+                                </div>
+                            </div>
+                            <div class="row" style="padding-bottom:5px;">
+                              {% if not quiz.description %}
+                                 <div class="col-sm-6 ">
+                                     <p class="article-content">Description : There is no description.</p>
+                                 </div>
+                              {% else %}
+                                 <div class="col-sm-6 ">
+                                     <p class="article-content">Description : {{ quiz.description }}</p>
+                                 </div>
+                              {% endif %}
+                                 <div class="col-sm-3 ">
+                                     <p class="article-content">Questions : {{ quiz.questions }}</p>
+                                 </div>
+                                 <div class="col-sm-3 ">
+                                     <p class="article-content">Marks : {{ quiz.marks }}</p>
+                                 </div>
+                            </div>
+                            <div class="row">
+                               <div class="col-sm-6" style="text-align:center;">
+                                   <a href="{% url 'quizpage' quiz.id %}" class="btn btn-primary">View Quiz</a>
+                               </div>
+                                <div class="col-sm-6" style="text-align:center;">
+                                   <a href="{% url 'responses' quiz.id %}" class="btn btn-primary">View Responses</a>
+                               </div>
+                            </div>
+                        </div>
+                    </div>
+                    <br>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="row">
+                <div class="row">
+                    <div class="col-sm-4">
+                        <button type="button" class="btn btn-info" data-toggle="collapse" data-target="#demo2">Enrolled Quizzes</button>
+                    </div>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control" placeholder="Search Hosted Quizzes" name="Search">
+                    </div>
+                </div>
+                <div id="demo2" class="collapse">
+                    <br><br>
+                    {% for quiz in enrolled %}
+                    <div class="row">
+                        <div  style="border:1px solid; padding:10px;">
+                            <div class="article-metadata">
+                                <div class="row">
+                                    <div class="col-sm-8">
+                                        <h4 class="article-content">Host: <a class="mr-2" href="{% url 'user_details' quiz.host.id %}">{{ quiz.host.first_name }} {{ quiz.host.last_name }}</a></h4>
+                                    </div>
+                                    <div class="col-sm-4" style="padding:5px;">
+                                        <small class="text-muted" >Date: {{ quiz.date_posted|date:"d/m/y, h:i a" }}</small>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-sm-7">
+                                    <h4>Topic: {{ quiz.title }}</h4>
+                                </div>
+                                <div class="col-sm-5" style="text-align:center;">
+                                   <a href="{% url 'review' pk=quiz.quiz_no authors='100' %}" class="btn btn-primary">View Response</a>
+                               </div>
+                            </div>
+                            <br>
+                            <div class="row">
+                                 <div class="col-sm-3 ">
+                                     <p class="article-content">Questions : {{ quiz.questions }}</p>
+                                 </div>
+                                 <div class="col-sm-4 ">
+                                     <p class="article-content">Marks Scored : {{ quiz.marks }} / {{ quiz.total_marks }}</p>
+                                 </div>
+                            </div>
+                            <br>
+                        </div>
+                    </div>
+                    <br>
+                    {% endfor %}
+                </div>
+                <br><br>
+            </div>
+        </div>
+    </div>
+{% endblock %}
